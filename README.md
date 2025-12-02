@@ -1,18 +1,74 @@
-# React + Vite
+# React AutoComplete Component
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Ten projekt zawiera komponent React o nazwie `AutoComplete`, który implementuje autouzupełnianie dla nazw miast. Komponent obsługuje debounce, pobieranie danych z API, nawigację klawiaturą oraz podświetlenie pasujących wyników. Dodatkowo, dołączony jest komponent `Form`, który integruje `AutoComplete` w prostym formularzu, oraz przykładowy plik HTML do szybkiego testowania.
 
-Currently, two official plugins are available:
+## Funkcje
+- **Debounce**: Opóźnienie zapytań do API o 300ms, aby uniknąć nadmiernych requestów podczas pisania.
+- **API Fetch**: Pobieranie sugestii z API Nominatim (OpenStreetMap) dla nazw miast.
+- **Keyboard Navigation**: Obsługa strzałek (w górę/dół), Enter (wybór), Escape (zamknięcie listy).
+- **Highlight Wyników**: Podświetlenie pasujących fragmentów tekstu w sugestiach.
+- **useTransition**: Użyty do poprawy responsywności UI podczas ładowania danych (React 18+).
+- **Integracja z Formularzem**: Przykładowy formularz z walidacją i obsługą submit.
+- **Obsługa Kliknięcia Poza Komponentem**: Zamknięcie listy sugestii po kliknięciu poza inputem/listą.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Wymagania
+- React 18+ (zalecany React 19 dla pełnej kompatybilności z useTransition).
+- Brak zewnętrznych zależności (wszystko wbudowane w React).
+- Przeglądarka wspierająca nowoczesny JavaScript.
 
-## React Compiler
+## Instalacja
+1. Sklonuj repozytorium:
+   ```
+   git clone <URL_REPOZYTORIUM>
+   cd <NAZWA_FOLDERU>
+   ```
+2. Zainstaluj zależności (jeśli używasz create-react-app lub podobnego):
+   ```
+   npm install
+   ```
+   (Projekt nie wymaga dodatkowych paczek poza Reactem).
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+## Użycie
+### Komponent AutoComplete
+Zapisz w pliku `AutoComplete.jsx`:
+```jsx
+// Kod komponentu AutoComplete (wklej z poprzednich przykładów)
+```
 
-Note: This will impact Vite dev & build performances.
+### Komponent Form
+Zapisz w pliku `Form.jsx`:
+```jsx
+// Kod komponentu Form (wklej z poprzednich przykładów)
+```
 
-## Expanding the ESLint configuration
+### Uruchomienie w Aplikacji React
+W pliku `App.jsx`:
+```jsx
+import React from 'react';
+import Form from './Form';
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+const App = () => <Form />;
+
+export default App;
+```
+
+Uruchom aplikację:
+```
+npm start
+```
+
+### Testowanie Lokalne bez Budowania
+Użyj pliku `index.html` z CDN React (wklej kod z poprzedniego przykładu). Otwórz plik w przeglądarce, aby przetestować formularz i autocomplete.
+
+## Przykłady
+- Wpisz "War" w pole miasta – sugestie jak "Warszawa" powinny się pojawić po debounce.
+- Użyj strzałek do nawigacji, Enter do wyboru.
+- Submit formularza sprawdzi walidację i zaloguje dane.
+
+## Uwagi
+- **API**: Używa publicznego API Nominatim – w produkcji dodaj obsługę CORS lub proxy, jeśli potrzeba. Ogranicz limity zapytań, aby uniknąć blokad.
+- **Modyfikacje**: Możesz zmienić API na inne (np. Google Places) lub dostosować debounce time.
+- **Wydajność**: useTransition zapewnia płynność, ale przetestuj na wolnych połączeniach.
+- **Licencja**: MIT (wolne oprogramowanie).
+
+Jeśli masz problemy lub sugestie, otwórz issue!
