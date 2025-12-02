@@ -109,10 +109,11 @@ const AutoComplete = () => {
   }, []);
 
   return (
-    <div style={{ position: "relative", width: "300px" }}>
+    <div style={{ position: "relative" }}>
       <input
         ref={inputRef}
         type="text"
+        id="city"
         value={query}
         onChange={handleInputChange}
         onKeyDown={handleKeyDown}
