@@ -16,8 +16,8 @@ const Form = () => {
   };
 
   // Obsługa wyboru z AutoComplete (przekazujemy callback)
-  const handleCitySelect = (selectedCity) => {
-    setFormData((prev) => ({ ...prev, city: selectedCity }));
+ const handleCityChange = (newCity) => {
+    setFormData((prev) => ({ ...prev, city: newCity }));
   };
 
   // Walidacja
@@ -72,7 +72,7 @@ const Form = () => {
 
       <div style={{ marginBottom: '16px' }}>
         <label htmlFor="city">Miasto:</label>
-        <AutoComplete onSelect={handleCitySelect} /> {/* Przekazujemy callback do wyboru */}
+        <AutoComplete value={formData.city} onChange={handleCityChange} /> {/* Przekazujemy callback do wyboru */}
         {errors.city && <span style={{ color: 'red' }}>{errors.city}</span>}
       </div>
 

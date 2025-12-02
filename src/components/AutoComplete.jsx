@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef, useTransition } from "react";
 
 // Przykładowy komponent AutoComplete dla miast
-const AutoComplete = () => {
-  const [query, setQuery] = useState(""); // Wartość wpisana przez użytkownika
+const AutoComplete = ({ value, onChange }) => {
   const [suggestions, setSuggestions] = useState([]); // Lista sugestii z API
   const [selectedIndex, setSelectedIndex] = useState(-1); // Indeks wybranego elementu (do nawigacji klawiaturą)
   const debounceRef = useRef(null); // Ref do timera debounce
@@ -11,6 +10,7 @@ const AutoComplete = () => {
   const ApiUrl = import.meta.env.VITE_API_URL; // URL API z pliku .env
 
   const [isPending, startTransition] = useTransition(); // Nowy hook do zarządzania przejściami
+  const query = value || ""; // Fallback na pusty string
 
   // Funkcja do pobierania sugestii z API (przykład z Nominatim OpenStreetMap)
   const fetchSuggestions = async (searchQuery) => {
@@ -47,10 +47,10 @@ const AutoComplete = () => {
 
   // Obsługa zmiany w input
   const handleInputChange = (e) => {
-    const value = e.target.value;
-    setQuery(value);
+    const newValue = e.target.value;
+    if (onChange) onChange(newValue);  // Aktualizuj stan w Form natychmiast
     setSelectedIndex(-1); // Resetuj wybór
-    debouncedFetch(value);
+    debouncedFetch(newValue);
   };
 
   // Obsługa nawigacji klawiaturą
@@ -73,10 +73,9 @@ const AutoComplete = () => {
 
   // Wybór sugestii
   const handleSelect = (selectedCity) => {
-    setQuery(selectedCity);
     setSuggestions([]);
     setSelectedIndex(-1);
-    // Tutaj możesz dodać logikę, np. wysłanie formularza lub inne akcje
+    if (onChange) onChange(selectedCity);
     console.log("Wybrano:", selectedCity);
   };
 
@@ -113,8 +112,8 @@ const AutoComplete = () => {
       <input
         ref={inputRef}
         type="text"
-        id="city"
         value={query}
+        id="city"
         onChange={handleInputChange}
         onKeyDown={handleKeyDown}
         placeholder="Wpisz nazwę miasta..."
