@@ -28,19 +28,6 @@ Ten projekt zawiera komponent React o nazwie `AutoComplete`, który implementuje
    ```
    (Projekt nie wymaga dodatkowych paczek poza Reactem).
 
-## Użycie
-### Komponent AutoComplete
-Zapisz w pliku `AutoComplete.jsx`:
-```jsx
-// Kod komponentu AutoComplete (wklej z poprzednich przykładów)
-```
-
-### Komponent Form
-Zapisz w pliku `Form.jsx`:
-```jsx
-// Kod komponentu Form (wklej z poprzednich przykładów)
-```
-
 ### Uruchomienie w Aplikacji React
 W pliku `App.jsx`:
 ```jsx
