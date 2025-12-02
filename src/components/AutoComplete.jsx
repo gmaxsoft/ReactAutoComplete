@@ -1,15 +1,16 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useTransition } from "react";
 
 // Przykładowy komponent AutoComplete dla miast
 const AutoComplete = () => {
   const [query, setQuery] = useState(""); // Wartość wpisana przez użytkownika
   const [suggestions, setSuggestions] = useState([]); // Lista sugestii z API
   const [selectedIndex, setSelectedIndex] = useState(-1); // Indeks wybranego elementu (do nawigacji klawiaturą)
-  const [isLoading, setIsLoading] = useState(false); // Stan ładowania
   const debounceRef = useRef(null); // Ref do timera debounce
   const inputRef = useRef(null); // Ref do inputa
   const listRef = useRef(null); // Ref do listy sugestii
   const ApiUrl = import.meta.env.VITE_API_URL; // URL API z pliku .env
+
+  const [isPending, startTransition] = useTransition(); // Nowy hook do zarządzania przejściami
 
   // Funkcja do pobierania sugestii z API (przykład z Nominatim OpenStreetMap)
   const fetchSuggestions = async (searchQuery) => {
@@ -17,21 +18,18 @@ const AutoComplete = () => {
       setSuggestions([]);
       return;
     }
-    setIsLoading(true);
     try {
       const response = await fetch(
-        `${ApiUrl}?format=json&city=${encodeURIComponent(
-          searchQuery
-        )}&limit=5`
+        `${ApiUrl}?format=json&city=${encodeURIComponent(searchQuery)}&limit=5`
       );
       const data = await response.json();
       const cities = data.map((item) => item.display_name);
-      setSuggestions(cities);
+      startTransition(() => {
+        setSuggestions(cities);
+      });
     } catch (error) {
       console.error("Błąd podczas pobierania sugestii:", error);
       setSuggestions([]);
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -41,8 +39,10 @@ const AutoComplete = () => {
       clearTimeout(debounceRef.current);
     }
     debounceRef.current = setTimeout(() => {
-      fetchSuggestions(searchQuery);
-    }, 500);
+      startTransition(() => {
+        fetchSuggestions(searchQuery);
+      });
+    }, 300);
   };
 
   // Obsługa zmiany w input
@@ -119,7 +119,7 @@ const AutoComplete = () => {
         placeholder="Wpisz nazwę miasta..."
         style={{ width: "100%", padding: "8px", fontSize: "16px" }}
       />
-      {isLoading && <div>Ładowanie...</div>}
+      {isPending && <div>Ładowanie...</div>}
       {suggestions.length > 0 && (
         <ul
           ref={listRef}
